@@ -11,7 +11,7 @@ app.set('port', process.env.PORT || 3000);
 const routes = require('./routes/usuario');
 
 /** Connect Mongo */
-mongoose.connect('mongodb://sergio:123456@ds239359.mlab.com:39359/usuarios', (err , res)=>{
+mongoose.connect(process.env.MONGO_URL, (err , res)=>{
     if(err) throw err;
     console.log('Base de datos Online');
 });
