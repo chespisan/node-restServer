@@ -1,6 +1,7 @@
 
 const express = require('express');
 const Usuario = require('../models/usuario');
+const { verificaToken } = require('../middlewares/autenticacion');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const app = express();
@@ -9,7 +10,7 @@ const app = express();
 // Rutas Prueba
 
 // aqui podemos crear una ruta con la configuracion para que me regrese todos lso usuarios cons los filtros que le demos
-app.get('/usuario', (req, res) => {
+app.get('/usuario', verificaToken, (req, res) => {
     
     // nos devolvera todos los usuarios, podemos filtrar un campo como condicion
     // ejemplo:  Usuario.find({}, 'nombre email') -> esto nos devolvera solo el campo nombre y email de cada registro
@@ -34,8 +35,8 @@ app.get('/usuario', (req, res) => {
         })
 });
 
-// podria ser para crear nuestro usuariio
-app.post('/usuario', (req, res)=> {
+// podria ser para crear nuestro usuariio, utilizar token de verificaion, va como parametro
+app.post('/usuario',  (req, res)=> {
     
     let body = req.body;
     // creamos la instancia del modelo de usuario, para crear el usuario 
@@ -63,7 +64,7 @@ app.post('/usuario', (req, res)=> {
 
 
 // actualizamos datos de nuestro suuario(podriamos usuarlo para actualizar puntos:BP)
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', verificaToken, function(req, res) {
 
     let id = req.params.id;
     // metodo pick del underscode para validar los campots que podamso actualizar, recibe como aprakmetro el objeto completo y un arreglo de los campos q se puedan validaer
@@ -87,7 +88,7 @@ app.put('/usuario/:id', function(req, res) {
 
 
 // eliminando registro
-app.delete('/usuario/:id', (req, res)=> {
+app.delete('/usuario/:id', verificaToken, (req, res)=> {
    
     //obtener el id
     let id = req.params.id
